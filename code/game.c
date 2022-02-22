@@ -1,8 +1,9 @@
 #include <windows.h>
 
 
-LRESULT CALLBACK DefWindowProcA(WNDPROC lpPrevWndFunc, HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam){
-    return DefWindowProcA();
+LRESULT window_callback(HWND hWnd,  UINT Msg, WPARAM wParam, LPARAM lParam){
+
+    return DefWindowProcA(hWnd, Msg, wParam, lParam);
 }
 
 int WinMain(
@@ -15,25 +16,19 @@ int WinMain(
  WNDCLASSA window_class= {0};
  window_class.style = CS_HREDRAW | CS_VREDRAW;
  window_class.lpszClassName = "Game Window";
- window_class.lpfnWndProc = DefWindowProcA;
+ window_class.lpfnWndProc = (WNDPROC)window_callback;
 
-//   RegisterClassA(
-//   [in] const WNDCLASSA *lpWndClass
-// );
+  RegisterClassA(
+    &window_class
+  );
 
-//   HWND window = HWND CreateWindowExA(
-//   0,
-//   LPCSTR    lpClassName,
-//   LPCSTR    lpWindowName,
-//   DWORD     dwStyle,
-//   int       X,
-//   int       Y,
-//   int       nWidth,
-//   int       nHeight,
-//   HWND      hWndParent,
-//   HMENU     hMenu,
-//   HINSTANCE hInstance,
-//   LPVOID    lpParam
-// );
-  return 0;
+
+  HWND window = CreateWindowExA(
+  0,
+  window_class.lpszClassName,
+  "Breakout",
+  WS_VISIBLE | WS_OVERLAPPEDWINDOW,
+  CW_USEDEFAULT,CW_USEDEFAULT,
+  1280, 720, 0, 0, 0, 0);
+return 0;
 }
