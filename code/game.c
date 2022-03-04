@@ -8,9 +8,20 @@ typedef int b32;
 
 global_variable b32 running = true;
 
-LRESULT window_callback(HWND hWnd,  UINT Msg, WPARAM wParam, LPARAM lParam){
+internal LRESULT window_callback(HWND hWnd,  UINT Msg, WPARAM wParam, LPARAM lParam){
+    
+    LRESULT result = 0;
 
-    return DefWindowProcA(hWnd, Msg, wParam, lParam);
+    switch(Msg){
+      case WM_CLOSE:
+      case WM_DESTROY: {
+        running = false;
+      }break;
+      default: {
+        result = DefWindowProc(hWnd, Msg, wParam, lParam);
+      }
+    }
+    return result;
 }
 
 int WinMain(
